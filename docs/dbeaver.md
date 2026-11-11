@@ -5,7 +5,7 @@ DBeaver is a visual client for the existing PostgreSQL server. It connects direc
 ## 1. Start PostgreSQL
 
 ```bash
-cd pod-assessment-platform/assessment-database
+cd pod-assessment-platform
 npm run db:local:start
 ```
 
