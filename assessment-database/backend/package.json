@@ -1,0 +1,19 @@
+{
+  "name": "@openmind/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file=../.env --watch src/index.js",
+    "start": "node --env-file=../.env src/index.js",
+    "db:setup": "node --env-file=../.env scripts/setup-db.js",
+    "db:local:start": "node scripts/local-postgres.js start",
+    "db:local:stop": "node scripts/local-postgres.js stop",
+    "test": "node --env-file=../.env --test tests/*.test.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "zod": "^4.1.0"
+  }
+}

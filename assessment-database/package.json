@@ -1,0 +1,32 @@
+{
+  "name": "openmind-assessment-database",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n api,web \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "npm run dev --workspace @openmind/backend",
+    "dev:client": "npm run dev --workspace @openmind/frontend",
+    "build": "npm run build --workspace @openmind/frontend",
+    "start": "npm start --workspace @openmind/backend",
+    "db:setup": "npm run db:setup --workspace @openmind/backend",
+    "db:local:start": "npm run db:local:start --workspace @openmind/backend",
+    "db:local:stop": "npm run db:local:stop --workspace @openmind/backend",
+    "test": "npm test --workspace @openmind/backend",
+    "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "concurrently": "^9.2.0",
+    "prettier": "^3.6.2"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
