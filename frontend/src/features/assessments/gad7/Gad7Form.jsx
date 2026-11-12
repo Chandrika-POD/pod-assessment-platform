@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, Check, CheckCircle2, Clock3 } from 'lucide-react';
-import { QUESTIONS, OPTIONS } from '../../../../../shared/assessments/gad7.js';
+import {
+  GAD7,
+  QUESTIONS,
+  OPTIONS,
+} from '../../../../../shared/assessments/gad7.js';
 import { saveAssessment } from '../../../api/patients.js';
 import { age, initials } from '../../../lib/formatters.js';
 import Modal from '../../../components/ui/Modal.jsx';
 
 export default function Gad7Form({ patient, onCancel, onSaved }) {
-  const [answers, setAnswers] = useState(Array(7).fill(null));
+  const [answers, setAnswers] = useState(Array(QUESTIONS.length).fill(null));
   const [submissionId, setSubmissionId] = useState(() => crypto.randomUUID());
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -27,7 +31,7 @@ export default function Gad7Form({ patient, onCancel, onSaved }) {
   async function submit(event) {
     event.preventDefault();
     setAttempted(true);
-    if (answered !== 7) {
+    if (answered !== QUESTIONS.length) {
       setError('Please answer all seven questions before saving.');
       formRef.current?.querySelector('[data-unanswered="true"] input')?.focus();
       return;
@@ -55,7 +59,7 @@ export default function Gad7Form({ patient, onCancel, onSaved }) {
       <div className="page-heading">
         <div>
           <div className="eyebrow">GAD-7 · SELF-REPORT</div>
-          <h1>Generalised Anxiety Disorder Assessment</h1>
+          <h1>{GAD7.title}</h1>
           <p>
             Seven questions to understand anxiety symptoms over the past two
             weeks.
@@ -77,13 +81,12 @@ export default function Gad7Form({ patient, onCancel, onSaved }) {
         <section className="panel questionnaire">
           <div className="questionnaire-intro">
             <div>
-              <h2>
-                Over the last 2 weeks, how often have you been bothered by the
-                following problems?
-              </h2>
+              <h2>{GAD7.instructions}</h2>
               <p>Select one response for each question.</p>
             </div>
-            <span>{answered} of 7 answered</span>
+            <span>
+              {answered} of {QUESTIONS.length} answered
+            </span>
           </div>
           <div
             className="progress-track"
@@ -91,9 +94,9 @@ export default function Gad7Form({ patient, onCancel, onSaved }) {
             aria-label="Questions answered"
             aria-valuenow={answered}
             aria-valuemin={0}
-            aria-valuemax={7}
+            aria-valuemax={QUESTIONS.length}
           >
-            <div style={{ width: `${(answered / 7) * 100}%` }} />
+            <div style={{ width: `${(answered / QUESTIONS.length) * 100}%` }} />
           </div>
           {QUESTIONS.map((question, index) => (
             <fieldset

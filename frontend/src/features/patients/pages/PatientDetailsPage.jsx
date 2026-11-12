@@ -5,6 +5,7 @@ import {
   Check,
   CheckCircle2,
   ClipboardList,
+  MessageCircle,
   Users,
 } from 'lucide-react';
 import { age, initials, dateLabel } from '../../../lib/formatters.js';
@@ -15,6 +16,7 @@ export default function PatientDetailsPage({
   saved,
   onBack,
   onStart,
+  onConversation,
 }) {
   return (
     <>
@@ -70,10 +72,15 @@ export default function PatientDetailsPage({
               GAD-7 <span>·</span> 7 questions <span>·</span> About 2 minutes
             </p>
           </div>
-          <button className="button primary" onClick={onStart}>
-            Start GAD-7
-            <ArrowRight size={17} />
-          </button>
+          <div className="assessment-start-actions">
+            <button className="button outline" onClick={onConversation}>
+              <MessageCircle size={17} /> Start conversation
+            </button>
+            <button className="button primary" onClick={onStart}>
+              Start GAD-7
+              <ArrowRight size={17} />
+            </button>
+          </div>
         </div>
       </section>
       <section className="panel">

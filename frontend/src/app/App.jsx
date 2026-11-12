@@ -5,6 +5,7 @@ import PatientsPage from '../features/patients/pages/PatientsPage.jsx';
 import PatientDetailsPage from '../features/patients/pages/PatientDetailsPage.jsx';
 import AddPatient from '../features/patients/components/AddPatient.jsx';
 import Gad7Form from '../features/assessments/gad7/Gad7Form.jsx';
+import AssessmentConversation from '../features/assessments/conversation/AssessmentConversation.jsx';
 
 export default function App() {
   const [patients, setPatients] = useState([]);
@@ -50,7 +51,7 @@ export default function App() {
   }
   function navigate(next) {
     if (
-      view === 'form' &&
+      ['form', 'conversation'].includes(view) &&
       !window.confirm(
         'Leave this assessment? Any unsaved answers will be discarded.',
       )
@@ -93,11 +94,24 @@ export default function App() {
           <PatientDetailsPage
             {...{ patient, saved }}
             onBack={() => navigate('patients')}
+            onConversation={() => {
+              setSaved(null);
+              setView('conversation');
+              window.scrollTo(0, 0);
+            }}
             onStart={() => {
               setSaved(null);
               setView('form');
               window.scrollTo(0, 0);
             }}
+          />
+        )}
+        {view === 'conversation' && patient && (
+          <AssessmentConversation
+            key={patient.id}
+            patient={patient}
+            onCancel={() => setView('details')}
+            onSaved={onSaved}
           />
         )}
         {view === 'form' && patient && (

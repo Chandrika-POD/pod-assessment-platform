@@ -1,4 +1,4 @@
-import { scoreGad7 } from '../../../../shared/assessments/gad7.js';
+import { GAD7, scoreGad7 } from '../../../../shared/assessments/gad7.js';
 import { HttpError } from '../../middleware/errors.js';
 
 export function createAssessmentsService(patients, assessments) {
@@ -13,6 +13,7 @@ export function createAssessmentsService(patients, assessments) {
         answers,
         score,
         severity,
+        definition: GAD7,
       });
       if (result) return { created: true, assessment: result };
 
@@ -20,6 +21,7 @@ export function createAssessmentsService(patients, assessments) {
       const existing = await assessments.findById(submissionId);
       if (
         !existing ||
+        existing.mode !== 'form' ||
         existing.patient_id !== patientId ||
         JSON.stringify(existing.answers) !== JSON.stringify(answers)
       ) {

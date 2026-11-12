@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "id": "GAD7",
+  "version": "1.0.0-draft.1",
+  "title": "Generalised Anxiety Disorder Assessment",
+  "shortTitle": "GAD-7",
+  "language": "en",
+  "referencePeriod": "the past two weeks",
+  "instructions": "Please read each statement and select from \"Not at all\" to \"Nearly every day\" to indicate how much the statement applied to you over the past two weeks.",
+  "questions": [
+    {
+      "id": "Q1",
+      "text": "Feeling nervous, anxious or on edge",
+      "options": [
+        {
+          "value": 0,
+          "score": 0,
+          "label": "Not at all"
+        },
+        {
+          "value": 1,
+          "score": 1,
+          "label": "Several days"
+        },
+        {
+          "value": 2,
+          "score": 2,
+          "label": "More than half the days"
+        },
+        {
+          "value": 3,
+          "score": 3,
+          "label": "Nearly every day"
+        }
+      ],
+      "source": {
+        "asset_id": "document_02",
+        "url": "https://novopsych.com/wp-content/uploads/2023/03/Generalised-Anxiety-Disorder-Assessment-GAD-7.pdf",
+        "page": 1
+      }
+    },
+    {
+      "id": "Q2",
+      "text": "Not being able to stop or control worrying",
+      "options": [
+        {
+          "value": 0,
+          "score": 0,
+          "label": "Not at all"
+        },
+        {
+          "value": 1,
+          "score": 1,
+          "label": "Several days"
+        },
+        {
+          "value": 2,
+          "score": 2,
+          "label": "More than half the days"
+        },
+        {
+          "value": 3,
+          "score": 3,
+          "label": "Nearly every day"
+        }
+      ],
+      "source": {
+        "asset_id": "document_02",
+        "url": "https://novopsych.com/wp-content/uploads/2023/03/Generalised-Anxiety-Disorder-Assessment-GAD-7.pdf",
+        "page": 1
+      }
+    },
+    {
+      "id": "Q3",
+      "text": "Worrying too much about different things",
+      "options": [
+        {
+          "value": 0,
+          "score": 0,
+          "label": "Not at all"
+        },
+        {
+          "value": 1,
+          "score": 1,
+          "label": "Several days"
+        },
+        {
+          "value": 2,
+          "score": 2,
+          "label": "More than half the days"
+        },
+        {
+          "value": 3,
+          "score": 3,
+          "label": "Nearly every day"
+        }
+      ],
+      "source": {
+        "asset_id": "document_02",
+        "url": "https://novopsych.com/wp-content/uploads/2023/03/Generalised-Anxiety-Disorder-Assessment-GAD-7.pdf",
+        "page": 1
+      }
+    },
+    {
+      "id": "Q4",
+      "text": "Trouble relaxing",
+      "options": [
+        {
+          "value": 0,
+          "score": 0,
+          "label": "Not at all"
+        },
+        {
+          "value": 1,
+          "score": 1,
+          "label": "Several days"
+        },
+        {
+          "value": 2,
+          "score": 2,
+          "label": "More than half the days"
+        },
+        {
+          "value": 3,
+          "score": 3,
+          "label": "Nearly every day"
+        }
+      ],
+      "source": {
+        "asset_id": "document_02",
+        "url": "https://novopsych.com/wp-content/uploads/2023/03/Generalised-Anxiety-Disorder-Assessment-GAD-7.pdf",
+        "page": 1
+      }
+    },
+    {
+      "id": "Q5",
+      "text": "Being so restless that it is hard to sit still",
+      "options": [
+        {
+          "value": 0,
+          "score": 0,
+          "label": "Not at all"
+        },
+        {
+          "value": 1,
+          "score": 1,
+          "label": "Several days"
+        },
+        {
+          "value": 2,
+          "score": 2,
+          "label": "More than half the days"
+        },
+        {
+          "value": 3,
+          "score": 3,
+          "label": "Nearly every day"
+        }
+      ],
+      "source": {
+        "asset_id": "document_02",
+        "url": "https://novopsych.com/wp-content/uploads/2023/03/Generalised-Anxiety-Disorder-Assessment-GAD-7.pdf",
+        "page": 1
+      }
+    },
+    {
+      "id": "Q6",
+      "text": "Becoming easily annoyed or irritable",
+      "options": [
+        {
+          "value": 0,
+          "score": 0,
+          "label": "Not at all"
+        },
+        {
+          "value": 1,
+          "score": 1,
+          "label": "Several days"
+        },
+        {
+          "value": 2,
+          "score": 2,
+          "label": "More than half the days"
+        },
+        {
+          "value": 3,
+          "score": 3,
+          "label": "Nearly every day"
+        }
+      ],
+      "source": {
+        "asset_id": "document_02",
+        "url": "https://novopsych.com/wp-content/uploads/2023/03/Generalised-Anxiety-Disorder-Assessment-GAD-7.pdf",
+        "page": 1
+      }
+    },
+    {
+      "id": "Q7",
+      "text": "Feeling afraid as if something awful might happen",
+      "options": [
+        {
+          "value": 0,
+          "score": 0,
+          "label": "Not at all"
+        },
+        {
+          "value": 1,
+          "score": 1,
+          "label": "Several days"
+        },
+        {
+          "value": 2,
+          "score": 2,
+          "label": "More than half the days"
+        },
+        {
+          "value": 3,
+          "score": 3,
+          "label": "Nearly every day"
+        }
+      ],
+      "source": {
+        "asset_id": "document_02",
+        "url": "https://novopsych.com/wp-content/uploads/2023/03/Generalised-Anxiety-Disorder-Assessment-GAD-7.pdf",
+        "page": 1
+      }
+    }
+  ],
+  "scoring": {
+    "method": "sum",
+    "min": 0,
+    "max": 21,
+    "bands": [
+      {
+        "min": 0,
+        "max": 4,
+        "label": "Minimal"
+      },
+      {
+        "min": 5,
+        "max": 9,
+        "label": "Mild"
+      },
+      {
+        "min": 10,
+        "max": 14,
+        "label": "Moderate"
+      },
+      {
+        "min": 15,
+        "max": 21,
+        "label": "Severe"
+      }
+    ]
+  },
+  "review": {
+    "status": "draft",
+    "readyForClinicalUse": false
+  },
+  "provenance": {
+    "derivedFrom": "assessment-registry/GAD7/versions/1.0.0-draft.1/gad7.cleaned.json",
+    "definitionVersion": "1.0.0-draft.1",
+    "sourceUrl": "https://novopsych.com/wp-content/uploads/2023/03/Generalised-Anxiety-Disorder-Assessment-GAD-7.pdf",
+    "notes": [
+      "Question text, response anchors, and scoring boundaries preserved from the cleaned definition.",
+      "Response labels use sentence case. None-Minimal displays as Minimal to match existing GAD-7 records.",
+      "Runtime format supports single-choice summed scores only. Imported source material requires review before registration."
+    ]
+  }
+}

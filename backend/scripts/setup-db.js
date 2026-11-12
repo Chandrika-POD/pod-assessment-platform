@@ -1,5 +1,5 @@
 import pg from 'pg';
-import { readFile } from 'node:fs/promises';
+import { migrate } from '../src/db/migrate.js';
 import { seedPatients } from '../src/db/seeds/patients.js';
 if (!process.env.DATABASE_URL)
   throw new Error('Copy .env.example to .env first.');
@@ -24,12 +24,7 @@ const db = new pg.Client({ connectionString: url.toString() });
 try {
   await db.connect();
   await db.query('BEGIN');
-  await db.query(
-    await readFile(
-      new URL('../src/db/migrations/001_initial.sql', import.meta.url),
-      'utf8',
-    ),
-  );
+  await migrate(db);
   await seedPatients(db);
   await db.query('COMMIT');
   console.log(

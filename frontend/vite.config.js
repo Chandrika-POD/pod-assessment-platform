@@ -9,10 +9,12 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     envDir: projectRoot,
     server: {
-      port: 5173,
+      port: Number(env.FRONTEND_PORT || 5173),
       strictPort: true,
       fs: { allow: [projectRoot] },
-      proxy: { '/api': `http://127.0.0.1:${env.PORT || 4100}` },
+      proxy: {
+        '/api': { target: `http://127.0.0.1:${env.PORT || 4100}`, ws: true },
+      },
     },
   };
 });

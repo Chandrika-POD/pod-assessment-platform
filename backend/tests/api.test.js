@@ -1,7 +1,7 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { migrate } from '../src/db/migrate.js';
 import pg from 'pg';
 import { createApp } from '../src/app.js';
 
@@ -14,12 +14,14 @@ const db = new pg.Pool({
 let server, base;
 before(async () => {
   await admin.query(`CREATE SCHEMA ${schema}`);
-  await db.query(
-    await readFile(
-      new URL('../src/db/migrations/001_initial.sql', import.meta.url),
-      'utf8',
-    ),
-  );
+  const migrationClient = await db.connect();
+  try {
+    await migrationClient.query('BEGIN');
+    await migrate(migrationClient);
+    await migrationClient.query('COMMIT');
+  } finally {
+    migrationClient.release();
+  }
   server = createApp(db).listen(0, '127.0.0.1');
   await new Promise((resolve) => server.once('listening', resolve));
   base = `http://127.0.0.1:${server.address().port}/api`;
@@ -174,4 +176,123 @@ test('API rejects invalid patient IDs, missing patients, incomplete answers and 
     ).status,
     400,
   );
+});
+
+test('Conversation drafts persist across service recreation, revisions reject stale updates, and completion is idempotent', async () => {
+  const patient = (
+    await request('/patients', {
+      name: 'Conversation Test',
+      dateOfBirth: '1990-01-01',
+      gender: 'Other',
+      email: 'conversation@example.com',
+    })
+  ).data;
+  const id = randomUUID();
+  const created = await request('/conversations', {
+    id,
+    patientId: patient.id,
+    assessmentId: 'GAD7',
+  });
+  assert.equal(created.status, 201);
+  assert.equal(created.data.definition.questions.length, 7);
+  assert.equal(
+    (await request(`/conversations/${id}/finalize`, { revision: 0 })).status,
+    400,
+  );
+  const patch = async (body) => {
+    const response = await fetch(`${base}/conversations/${id}/answers`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    return { status: response.status, data: await response.json() };
+  };
+  assert.equal(
+    (await patch({ questionId: 'Q2', value: 1, revision: 0 })).status,
+    409,
+  );
+  assert.equal(
+    (await patch({ questionId: 'Q1', value: 4, revision: 0 })).status,
+    400,
+  );
+  const concurrent = await Promise.all([
+    patch({ questionId: 'Q1', value: 2, revision: 0 }),
+    patch({ questionId: 'Q1', value: 2, revision: 0 }),
+  ]);
+  assert.deepEqual(concurrent.map((r) => r.status).sort(), [200, 409]);
+  const { createConversationsService } =
+    await import('../src/modules/conversations/conversations.service.js');
+  const resumed = await createConversationsService(db).get(id);
+  assert.equal(resumed.answers[0], 2);
+  assert.equal(resumed.revision, 1);
+  for (let i = 1; i < 7; i++)
+    assert.equal(
+      (await patch({ questionId: `Q${i + 1}`, value: 1, revision: i })).status,
+      200,
+    );
+  // Final review can correct a confirmed answer.
+  assert.equal(
+    (await patch({ questionId: 'Q1', value: 3, revision: 7 })).status,
+    200,
+  );
+  assert.equal(
+    (await request(`/conversations/${id}/finalize`, { revision: 7 })).status,
+    409,
+  );
+  const result = await request(`/conversations/${id}/finalize`, {
+    revision: 8,
+  });
+  assert.equal(result.status, 200);
+  assert.equal(result.data.score, 9);
+  assert.equal(result.data.severity, 'Mild');
+  assert.equal(result.data.mode, 'conversation');
+  assert.equal(result.data.definition.version, '1.0.0-draft.1');
+  const retry = await request(`/conversations/${id}/finalize`, { revision: 8 });
+  assert.equal(retry.data.id, result.data.id);
+  assert.equal(
+    (await patch({ questionId: 'Q1', value: 0, revision: 8 })).status,
+    409,
+  );
+  assert.equal(
+    (await request(`/patients/${patient.id}`)).data.assessments.length,
+    1,
+  );
+  const secondPatient = (
+    await request('/patients', {
+      name: 'Other Conversation Test',
+      dateOfBirth: '1990-01-01',
+      gender: 'Other',
+      email: 'other@example.com',
+    })
+  ).data;
+  assert.equal(
+    (
+      await request('/conversations', {
+        id,
+        patientId: secondPatient.id,
+        assessmentId: 'GAD7',
+      })
+    ).status,
+    409,
+  );
+  assert.equal(
+    (
+      await request('/conversations', {
+        id: randomUUID(),
+        patientId: patient.id,
+        assessmentId: 'UNKNOWN',
+      })
+    ).status,
+    400,
+  );
+});
+test('Public configuration exposes definitions and availability without secrets', async () => {
+  const result = await request('/assessment-definitions');
+  assert.equal(result.status, 200);
+  assert.equal(typeof result.data.geminiConfigured, 'boolean');
+  assert.equal(result.data.definitions[0].id, 'GAD7');
+  assert.deepEqual(Object.keys(result.data).sort(), [
+    'definitions',
+    'geminiConfigured',
+  ]);
 });

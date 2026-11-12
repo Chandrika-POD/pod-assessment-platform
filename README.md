@@ -18,6 +18,19 @@ Open http://localhost:5173. The API runs at http://127.0.0.1:4100.
 
 `db:local:start` creates a separate PostgreSQL cluster in `.postgres/data`, with local development user `assessment`, password `assessment_local`, and port `55432`. It binds only to localhost and does not change the system PostgreSQL service. `db:setup` creates `assessment_db`, creates the tables, and seeds six fictional patients. Running it again preserves patient records and assessment history. No manual database creation is required with this setup. Stop the project database with `npm run db:local:stop`; data is retained.
 
+## Gemini conversation for GAD-7
+
+Open a patient and choose **Start conversation** for typed or microphone responses. The existing **Start GAD-7** form also remains available. Both use [`shared/assessments/gad7.json`](shared/assessments/gad7.json). Gemini proposes a response, you confirm it, and the backend scores the final reviewed answers.
+
+Add your key to the existing root `.env` and restart the API:
+
+```dotenv
+GEMINI_API_KEY=your_key_here
+GEMINI_LIVE_MODEL=gemini-3.8-live
+```
+
+The key stays on the backend. Confirmed drafts survive reconnects; completed records retain their JSON definition and conversation/form mode. Startup applies the additive database migration automatically. See [Gemini setup and future JSON assessments](docs/gemini-assessments.md) for data flow, testing, and extension limits. Only GAD-7 is enabled in this first integration.
+
 ## Alternative database setups
 
 **Docker:** instead of `db:local:start`, run `docker compose up -d --wait`, then `npm run db:setup`. The same `.env.example` works. Do not run both database options at once: both use port 55432. `docker compose down` stops the container and keeps the named data volume.
